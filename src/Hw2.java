@@ -76,13 +76,13 @@ class ActiveTypePanel extends JPanel{
 //Panel contains query rad
 class QueryPanel extends JPanel{
 	private int whichQuery = 0;
-	ImagePanel imagePanel;
 	private JRadioButton
 		rb1 = new JRadioButton("Whole Region", true),
 		rb2 = new JRadioButton("Range Query", false),
 		rb3 = new JRadioButton("Find Neighbor Buildings", false),
 		rb4 = new JRadioButton("Find Closets Fire Hydrants", false);		
 	private ButtonGroup queryRadioButtonGroup;
+
 	private ActionListener al = new ActionListener(){
 		public void actionPerformed(ActionEvent e){
 			createQueryNum(((JRadioButton)e.getSource()).getText());
@@ -91,8 +91,6 @@ class QueryPanel extends JPanel{
 	};
 	
 	public QueryPanel(){
-		imagePanel = Hw2.imagePanel;
-		
 		setPreferredSize(new Dimension(210,200));
 		setBorder(BorderFactory.createTitledBorder("Query"));
 		setLayout(new FlowLayout(FlowLayout.LEFT));
@@ -129,20 +127,18 @@ class QueryPanel extends JPanel{
 		else if(str.equals("Find Closets Fire Hydrants")){
 			whichQuery = 3;
 		}	
-		System.out.println(whichQuery);
 	}
 	
 	private void queryHandler(){
-		Hw2.imagePanel.clearAll();
-		Hw2.imagePanel.repaint();
-		//Range Query
-		if(whichQuery==1){ 
-			
-		}else{
-			Points range = imagePanel.getRange();
+		//Changing radio button will reset the image. 
+		Hw2.imagePanel.clearAll();	
+		//Other radio button will clear the range points
+		if(whichQuery!=1){ 
+			Points range = Hw2.imagePanel.getRange();
 			range.clear();
-			imagePanel.repaint();
 		}
+		
+		Hw2.imagePanel.repaint();
 		
 		if(whichQuery==3){
 			SqlStatement sqlStatement = new SqlStatement(whichQuery);
@@ -279,7 +275,6 @@ class Points{
 	
 	public void appendPoints(double[] point){
 		pointsList.add(point);
-		
 	}
 	
 	public double[][] getPointArr(){
@@ -421,7 +416,7 @@ class ImagePanel extends JPanel{
 		clearFiredBuilding();
 		clearCheckedFiredbuilding();
 	}
-	//paint function that draw result shapes on the image panel
+	//paint function draws result shapes on the image panel
 	//the repaint() function in other places will call this paint() function
 	public void paint(Graphics g){
 		super.paint(g);
@@ -465,6 +460,7 @@ class ImagePanel extends JPanel{
 	}
 }
 
+//Display mouse coordinates and SQL statement
 class DisplayPanel extends JPanel{
 	private JLabel mousePosition;
 	private TextArea sqlArea;
@@ -483,7 +479,6 @@ class DisplayPanel extends JPanel{
 		add(BorderLayout.NORTH,mousePosition);
 		add(BorderLayout.SOUTH,sqlArea);
 		add(scrollPane);
-		
 		//setBorder(BorderFactory.createLineBorder(Color.red, 2));
 	}
 	
@@ -494,10 +489,6 @@ class DisplayPanel extends JPanel{
 	public void appendTextArea(String str){
 		sqlArea.append("Query "+queryCount+":"+str+"\n");
 		queryCount=queryCount+1;
-	}
-	
-	public void setTextArea(String str){
-		sqlArea.setText(str);
 	}
 }
 
