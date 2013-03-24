@@ -1,3 +1,7 @@
+//This file deal all options with Database
+//class Hw2Connection create connection with database
+//sqlstatement receive request from GUI and create sql statements to execute query.
+
 import oracle.jdbc.*;
 import oracle.spatial.geometry.*;
 import oracle.sql.STRUCT;

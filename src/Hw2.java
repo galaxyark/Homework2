@@ -1,3 +1,7 @@
+//GUI part the program
+//Include all components of the User interface
+//receive the events from user and send request to Hw2Functions
+
 import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
@@ -62,9 +66,6 @@ class ActiveTypePanel extends JPanel{
 		else{
 			tableArr[tableIndex] = false;
 		}
-		
-		//check box information debug
-		//System.out.println(tableArr[0]+" "+tableArr[1]+" "+tableArr[2]);
 	}
 	
 	public boolean[] getTypes(){
@@ -100,6 +101,7 @@ class QueryPanel extends JPanel{
 		rb2.addActionListener(al);
 		rb3.addActionListener(al);
 		rb4.addActionListener(al);
+		
 		//Add four button into a ButtonGroup to make them mutual
 		queryRadioButtonGroup = new ButtonGroup();
 		queryRadioButtonGroup.add(rb1);
@@ -295,10 +297,8 @@ class Points{
 	}
 }
 
-
 // JPanel contains map.jpg
-class ImagePanel extends JPanel{
-	
+class ImagePanel extends JPanel{	
 	double[][] hydrant; 
 	GeneralPath building;
 	GeneralPath firedBuilding;
@@ -394,7 +394,6 @@ class ImagePanel extends JPanel{
 	}
 	
 	public void createRange(){
-
 		double[] tmpPoints = new double[rangePoints.getSize()*2];
 		double[][] rangP = rangePoints.getPointArr();
 		System.out.println(rangePoints.getSize());
@@ -423,20 +422,25 @@ class ImagePanel extends JPanel{
 		clearCheckedFiredbuilding();
 	}
 	//paint function that draw result shapes on the image panel
+	//the repaint() function in other places will call this paint() function
 	public void paint(Graphics g){
 		super.paint(g);
 		Graphics2D g2 = (Graphics2D)g;
 		
+		//draw building 
 		g2.setPaint(Color.yellow);
 		g2.draw(building);
 		
+		//draw fired building
 		Stroke stroke = new BasicStroke(5.0f);
 		g2.setStroke(stroke);
 		g2.setPaint(Color.red);
 		g2.draw(firedBuilding);	
 		
+		//fill or unfill checked fired building
 		g2.fill(checkedFiredBuildingPath);
 		
+		//draw all hydrants
 		if(hydrant!=null){
 			g2.setPaint(Color.green);
 			for(double[] h:hydrant){
@@ -444,15 +448,15 @@ class ImagePanel extends JPanel{
 			}
 		}
 		
-		//draw points of select area
+		//draw points of range area
 		if(rangePoints.getSize()!=0){
 			g2.setColor(Color.red);
-			if(whichButton == 1){				
+			if(whichButton == 1){			//left button, draw points	
 				for(double[] d:rangePoints.getPointArr()){
 					g2.fill(new Rectangle2D.Double(d[0], d[1], 5, 5));
 				}
 			}
-			else if(whichButton == 3){
+			else if(whichButton == 3){		//right button, draw the frame
 				g2.draw(rangePath);
 				rangePath.reset();
 				rangePoints.clear();
